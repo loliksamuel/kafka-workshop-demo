@@ -1,4 +1,5 @@
-**Description:** 
+ Description 
+ ------------------------
 ```
 An introduction to Apache Kafka workshop
 Kafka overview (capabilities, and major components)
@@ -44,6 +45,7 @@ Instructions for running
 
  
 Optional
+---------
 ```
 https://github.com/yahoo/kafka-manager/releases
 Instructions how to install kafka monitor:
