@@ -1,0 +1,45 @@
+cd dev/kafka-workshop/
+sudo zookeeper-3.4.10/bin/zkServer.sh start
+./kafka_2.11-0.11.0.1/bin/kafka-server-start.sh ./kafka_2.11-0.11.0.1/config/server0.properties &
+./kafka_2.11-0.11.0.1/bin/kafka-server-start.sh ./kafka_2.11-0.11.0.1/config/server1.properties &
+./kafka_2.11-0.11.0.1/bin/kafka-server-start.sh ./kafka_2.11-0.11.0.1/config/server2.properties &
+
+kafkatool/kafkatool
+
+git clone https://github.com/levplotkin/kafka-introduction-workshop.git
+
+touch /home/lev/dev/kafka-workshop/test-source.log
+touch /home/lev/dev/kafka-workshop/test-sink.log
+
+cp ./demo/target/kafka-workshop-demo-1.0-SNAPSHOT.jar ./kafka_2.11-0.11.0.1/libs/
+
+cd  /home/lev/dev/kafka-workshop/kafka_2.11-0.11.0.1/bin
+./kafka-topics.sh  --list --zookeeper=127.0.0.1:2181
+./kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 3 --partitions 10 --topic test-sink
+./kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 3 --partitions 10 --topic test-source
+
+./kafka_2.11-0.11.0.1/bin/connect-standalone.sh ./demo/src/main/resources/connect-standalone.properties ./demo/src/main/resources/connect-file-source.properties
+./kafka_2.11-0.11.0.1/bin/connect-standalone.sh ./demo/src/main/resources/connect-standalone.properties ./demo/src/main/resources/connect-file-sink.properties
+
+echo "msg 1" > /home/lev/dev/kafka-workshop/test-source.log
+echo "msg 2" >> /home/lev/dev/kafka-workshop/test-source.log
+echo "msg 2" >> /home/lev/dev/kafka-workshop/test-source.log
+echo "msg 4" >> /home/lev/dev/kafka-workshop/test-source.log
+
+
+cat /home/lev/dev/kafka-workshop/test-sink.log
+
+dev/kafka-workshop/kafka_2.11-0.11.0.1/bin/kafka-console-producer.sh --broker-list localhost:9092 --topic TextLinesTopic
+bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning
+
+
+
+Connector API test
+
+$cp ....kafka-workshop-demo-1.0-SNAPSHOT.jar ./kafka_2.11-0.11.0.1/libs/
+$./connect-standalone.sh ./demo/src/main/resources/connect-standalone.properties ./demo/src/main/resources/connect-file-source.properties 
+$./connect-standalone.sh ./demo/src/main/resources/connect-standalone.properties ./demo/src/main/resources/connect-file-sink.properties 
+
+
+$ echo "msg 1" >> test-source.log
+$ cat  test-sink.log
