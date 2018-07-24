@@ -1,8 +1,18 @@
+**Description:** 
+```
+An introduction to Apache Kafka workshop
+Kafka overview (capabilities, and major components)
+Hands-on part: 
+Running Kafka cluster with basic configuration 
+Hello world example
+Use cases and tools 
+```
+ 
+ 
 Instructions for running
 ------------------------
-1.  Run zookeeper
+1.  Run zookeeper-zookeeper-server-start /usr/local/etc/kafka/zookeeper.properties
 
-2.  Run zookeeper
 
 3.  Run your connect-file-source plugin
     ```
@@ -32,16 +42,7 @@ Instructions for running
     $ cat test.sink.txt
     ```
 
-
-**Prerequisite:**
-
-Java 8 
-
-Zookeeper and Kafka packages: 
-```
-https://apache.mivzakim.net/zookeeper/current/zookeeper-3.4.10.tar.gz
-http://apache.mivzakim.net/kafka/0.11.0.1/kafka_2.11-0.11.0.1.tgz
-```
+ 
 Optional
 ```
 https://github.com/yahoo/kafka-manager/releases
@@ -57,19 +58,6 @@ Optional: Kafka tool
 ```
 wget http://www.kafkatool.com/download/kafkatool.sh
 ```
-**Description:** 
-```
-An introduction to Apache Kafka workshop
-Kafka overview (capabilities, and major components)
-Hands-on part: 
-Running Kafka cluster with basic configuration 
-Hello world example
-Use cases and tools 
-```
-**Disclaimer** 
-```
-Currently I am not planning to include advanced topics like Kafka streams
-I will send updated topics list, before the workshop
-```
+
 
 
