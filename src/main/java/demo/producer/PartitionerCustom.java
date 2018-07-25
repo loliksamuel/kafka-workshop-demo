@@ -7,13 +7,14 @@ import org.apache.kafka.common.PartitionInfo;
 import java.util.List;
 import java.util.Map;
 
-public class CustomPartitioner implements Partitioner {
+public class PartitionerCustom implements Partitioner {
     @Override
     public int partition(String topic, Object key, byte[] keyBytes, Object value, byte[] valueBytes, Cluster cluster) {
         List<PartitionInfo> partitionInfos = cluster.availablePartitionsForTopic(topic);
 
         int partitionNum = value.hashCode() % partitionInfos.size();
         partitionNum = partitionNum < 0 ? -partitionNum : partitionNum;
+        //System.out.println("partitionNum="+partitionNum);
         return partitionNum;
     }
 

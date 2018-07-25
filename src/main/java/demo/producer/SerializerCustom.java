@@ -9,7 +9,7 @@ import org.apache.kafka.common.serialization.Serializer;
 
 import java.util.Map;
 
-public class CustomSerializer implements Serializer<JsonNode> {
+public class SerializerCustom implements Serializer<JsonNode> {
 
     private final ObjectWriter writer = new ObjectMapper().writer();
 

@@ -13,7 +13,7 @@ import java.util.*;
 public class DemoConsumer {
 
     private final KafkaConsumer<String, JsonNode> consumer;
-
+    private final static  String TOPIC_NAME = "test";
     public DemoConsumer(List<String> topics) {
 
         Properties props = new Properties();
@@ -21,7 +21,7 @@ public class DemoConsumer {
 
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG          , false);//if it false we need to do commit
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG      , StringDeserializer.class.getName());
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG    , CustomDeserializer.class.getName());
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG    , DeserializerCustom.class.getName());
         props.put(ConsumerConfig.GROUP_ID_CONFIG                    , "demo-consumer-group-id");//in order to be consintent
         props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG          , 10000);
         props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG            , 3);
@@ -54,7 +54,7 @@ public class DemoConsumer {
 
     public static void readAllRecords() throws JsonProcessingException {
         ObjectMapper objectMapper   = new ObjectMapper();
-        List<String> topics         = Collections.singletonList("test");
+        List<String> topics         = Collections.singletonList(TOPIC_NAME);
         DemoConsumer consumer       = new DemoConsumer(topics);
 
         try {

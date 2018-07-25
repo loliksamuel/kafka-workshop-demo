@@ -12,7 +12,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Map;
 
-public class CustomDeserializer implements Deserializer<JsonNode> {
+public class DeserializerCustom implements Deserializer<JsonNode> {
 
     private final ObjectMapper mapper = new ObjectMapper();
 

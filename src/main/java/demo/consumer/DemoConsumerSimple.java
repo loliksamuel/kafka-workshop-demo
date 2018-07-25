@@ -13,14 +13,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class DemoSimpleConsumer {
+public class DemoConsumerSimple {
 
     private SimpleConsumer simpleConsumer;
 
     private final DemoConsumer consumer;
-
-    public DemoSimpleConsumer() {
-        List<String> topics = Collections.singletonList("test");
+    private final static  String TOPIC_NAME = "test";
+    public DemoConsumerSimple() {
+        List<String> topics = Collections.singletonList(TOPIC_NAME);
         consumer = new DemoConsumer(topics);
 
     }
@@ -30,15 +30,15 @@ public class DemoSimpleConsumer {
 
     public static void partitionsAssignments() {
         DemoConsumer consumer = new DemoConsumer(null);
-        String topic = "test";
-        TopicPartition partition0 = new TopicPartition(topic, 0);
-        TopicPartition partition1 = new TopicPartition(topic, 1);
+
+        TopicPartition partition0 = new TopicPartition(TOPIC_NAME, 0);
+        TopicPartition partition1 = new TopicPartition(TOPIC_NAME, 1);
         consumer.assign(Arrays.asList(partition0, partition1));
     }
 
 
     public static void readAllRecordsManualOffsetControl() {
-        List<String> topics = Collections.singletonList("test");
+        List<String> topics = Collections.singletonList(TOPIC_NAME);
         DemoConsumer consumer = new DemoConsumer(topics);
 
         try {
@@ -47,7 +47,7 @@ public class DemoSimpleConsumer {
                 for (TopicPartition partition : records.partitions()) {
                     List<ConsumerRecord<String, JsonNode>> partitionRecords = records.records(partition);
                     for (ConsumerRecord<String, JsonNode> record : partitionRecords) {
-                        System.out.println(record.offset() + ": " + record.value());
+                        System.out.println("topic:" + record.topic() +", partition:" + record.partition() +", offset:" + record.offset() + " : msg=" + record.value());
                     }
                     long lastOffset = partitionRecords.get(partitionRecords.size() - 1).offset();
                     consumer.commit(Collections.singletonMap(partition, new OffsetAndMetadata(lastOffset + 1)));
