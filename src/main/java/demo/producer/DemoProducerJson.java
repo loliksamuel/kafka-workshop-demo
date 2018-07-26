@@ -9,13 +9,13 @@ import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.Properties;
 
-public class DemoProducer {
+public class DemoProducerJson {
 
 
     private final KafkaProducer<String, JsonNode> producer;
     private final Callback callback;
 
-    public DemoProducer() {
+    public DemoProducerJson() {
 
         Properties props = new Properties();
 

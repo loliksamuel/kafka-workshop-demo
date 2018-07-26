@@ -13,33 +13,38 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class DemoConsumerSimple {
+public class AppMainConsumerJson {
 
     private SimpleConsumer simpleConsumer;
 
-    private final DemoConsumer consumer;
-    private final static  String TOPIC_NAME = "test";
-    public DemoConsumerSimple() {
+    private final DemoConsumerJson consumer;
+
+
+    private final static  String TOPIC_NAME = "testJson";
+
+    public static void main(String[] args) throws JsonProcessingException {
+
+        AppMainConsumerJson.readAllRecordsManualOffsetControl(TOPIC_NAME);
+        //AppMainConsumerJson.partitionsAssignments();
+        //DemoConsumerJson.readAllRecords();
+
+    }
+
+    public AppMainConsumerJson() {
         List<String> topics = Collections.singletonList(TOPIC_NAME);
-        consumer = new DemoConsumer(topics);
+        consumer = new DemoConsumerJson(topics);
 
     }
 
 
 
 
-    public static void partitionsAssignments() {
-        DemoConsumer consumer = new DemoConsumer(null);
-
-        TopicPartition partition0 = new TopicPartition(TOPIC_NAME, 0);
-        TopicPartition partition1 = new TopicPartition(TOPIC_NAME, 1);
-        consumer.assign(Arrays.asList(partition0, partition1));
-    }
 
 
-    public static void readAllRecordsManualOffsetControl() {
-        List<String> topics = Collections.singletonList(TOPIC_NAME);
-        DemoConsumer consumer = new DemoConsumer(topics);
+
+    public static void readAllRecordsManualOffsetControl(String topicName) {
+        List<String> topics = Collections.singletonList(topicName);
+        DemoConsumerJson consumer = new DemoConsumerJson(topics);
 
         try {
             while (true) {
@@ -56,5 +61,13 @@ public class DemoConsumerSimple {
         } finally {
             consumer.close();
         }
+    }
+
+    public static void partitionsAssignments() {
+        DemoConsumerJson consumer = new DemoConsumerJson(null);
+
+        TopicPartition partition0 = new TopicPartition(TOPIC_NAME, 0);
+        TopicPartition partition1 = new TopicPartition(TOPIC_NAME, 1);
+        consumer.assign(Arrays.asList(partition0, partition1));
     }
 }

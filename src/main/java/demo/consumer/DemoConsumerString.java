@@ -2,7 +2,6 @@ package demo.consumer;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.TopicPartition;
@@ -10,21 +9,20 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 
 import java.util.*;
 
-public class DemoConsumer {
+public class DemoConsumerString {
 
-    private final KafkaConsumer<String, JsonNode> consumer;
+    private final KafkaConsumer<String, String> consumer;
     private final static  String TOPIC_NAME = "test";
-    public DemoConsumer(List<String> topics) {
+    public DemoConsumerString(List<String> topics) {
 
         Properties props = new Properties();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9090,localhost:9091,localhost:9092");
-
-        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG          , false);//if it false we need to do commit
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG      , StringDeserializer.class.getName());
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG    , DeserializerCustom.class.getName());
-        props.put(ConsumerConfig.GROUP_ID_CONFIG                    , "demo-consumer-group-id");//in order to be consintent
-        props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG          , 10000);
-        props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG            , 3);
+        props.put(ConsumerConfig.           BOOTSTRAP_SERVERS_CONFIG , "localhost:9090,localhost:9091,localhost:9092");
+        props.put(ConsumerConfig.                    GROUP_ID_CONFIG , "demo-consumer-group-id");//in order to be consintent
+        props.put(ConsumerConfig.          ENABLE_AUTO_COMMIT_CONFIG , false);//if it false we need to do commit
+        props.put(ConsumerConfig.          SESSION_TIMEOUT_MS_CONFIG , 10000);
+        props.put(ConsumerConfig.            MAX_POLL_RECORDS_CONFIG , 3);
+        props.put(ConsumerConfig.      KEY_DESERIALIZER_CLASS_CONFIG , StringDeserializer.class.getName());
+        props.put(ConsumerConfig.    VALUE_DESERIALIZER_CLASS_CONFIG , StringDeserializer.class.getName());
 
         this.consumer = new KafkaConsumer<>(props);
         this.consumer.subscribe(topics, new ConsumerRebalanceListener() {
@@ -41,7 +39,7 @@ public class DemoConsumer {
 
     }
 
-    public ConsumerRecords<String, JsonNode> poll() {
+    public ConsumerRecords<String, String> poll() {
         return this.consumer.poll(50);
 
     }
@@ -55,16 +53,16 @@ public class DemoConsumer {
     public static void readAllRecords() throws JsonProcessingException {
         ObjectMapper objectMapper   = new ObjectMapper();
         List<String> topics         = Collections.singletonList(TOPIC_NAME);
-        DemoConsumer consumer       = new DemoConsumer(topics);
+        DemoConsumerString consumer       = new DemoConsumerString(topics);
 
         try {
             while (true) { //infinite loop
 
-                ConsumerRecords<String, JsonNode> records = consumer.poll();
+                ConsumerRecords<String, String> records = consumer.poll();
 
-                for (ConsumerRecord<String, JsonNode> record : records) {
+                for (ConsumerRecord<String, String> record : records) {
 
-                    JsonNode value = record.value();
+                    String value = record.value();
                     System.out.println(objectMapper.writeValueAsString(value));
                 }
                 consumer.commit();

@@ -23,13 +23,12 @@ public class DemoStream {
 
     public static void main(String[] args) {
 
-        final String TOPIC_FROM               = "TextLinesTopic";//use kafka-console-producer.sh --broker-list localhost:9092 --topic TextLinesTopic
-        final String TOPIC_TO                 = "WordsWithCountsTopic";
-        final Serde<String> stringSerde       = Serdes.String();//serelize/deserilized
-        final Serde<Long>     longSerde       = Serdes.Long  ();//serelize/deserilized
+        final String TOPIC_FROM               = "test";//"TopicWords" "test"//use kafka-console-producer.sh --broker-list localhost:9092 --topic TextLinesTopic
+        final String TOPIC_TO                 = "TopicWordsWithCounts";
         final KStreamBuilder    builder       = new KStreamBuilder();
         final Properties streamsConfiguration = getProperties();
-
+        final Serde<String> stringSerde       = Serdes.String();//serelize/deserilized
+        final Serde<Long>     longSerde       = Serdes.Long  ();//serelize/deserilized
 
 
         final KStream<String, String> textLines = builder.stream(stringSerde, stringSerde, TOPIC_FROM);
@@ -50,7 +49,7 @@ public class DemoStream {
                 // Note: no need to specify explicit serdes because the resulting key and value types match our default serde settings
                 .groupBy((key, word) -> word)
                 .count("Counts");
-
+        System.out.println("wordCounts="+wordCounts);
 
         wordCounts.to(stringSerde, longSerde, TOPIC_TO);
 
@@ -59,20 +58,19 @@ public class DemoStream {
 
         streams.cleanUp();
         streams.start();
-
         // Add shutdown hook to respond to SIGTERM and gracefully close Kafka Streams
         Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
     }
 
     private static Properties getProperties() {
         final Properties streamsConfiguration = new Properties();
-        streamsConfiguration.put(StreamsConfig.APPLICATION_ID_CONFIG            , "wordcount-lambda-example");
-        streamsConfiguration.put(StreamsConfig.CLIENT_ID_CONFIG                 , "wordcount-lambda-example-client");
-        streamsConfiguration.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG         , "localhost:9092");
-        streamsConfiguration.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG   , Serdes.String().getClass().getName());
-        streamsConfiguration.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG , Serdes.String().getClass().getName());
-        streamsConfiguration.put(StreamsConfig.COMMIT_INTERVAL_MS_CONFIG        , 10 * 1000);
-        streamsConfiguration.put(StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG , 0);
+        streamsConfiguration.put(StreamsConfig.          BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        streamsConfiguration.put(StreamsConfig.             APPLICATION_ID_CONFIG, "wordcount-lambda-example");
+        streamsConfiguration.put(StreamsConfig.                  CLIENT_ID_CONFIG, "wordcount-lambda-example-client");
+        streamsConfiguration.put(StreamsConfig.         COMMIT_INTERVAL_MS_CONFIG, 10 * 1000);
+        streamsConfiguration.put(StreamsConfig.  CACHE_MAX_BYTES_BUFFERING_CONFIG, 0);
+        streamsConfiguration.put(StreamsConfig.    DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
+        streamsConfiguration.put(StreamsConfig.  DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
         return streamsConfiguration;
     }
 
